@@ -634,74 +634,92 @@ export function AdminDashboard({
 
   // ------------------ AUTHENTICATED PANEL LAYOUT ------------------
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 font-sans" id="admin-panel-root">
+    <div className="min-h-screen bg-[#FAF4EB] text-slate-800 font-sans flex flex-col lg:flex-row w-full text-left" id="admin-panel-root">
       
-      {/* Admin header */}
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center pb-6 border-b border-slate-100 gap-4 mb-8 text-left">
+      {/* Corporate Sidebar Navigation columns */}
+      <aside className="w-full lg:w-72 bg-[#FCF9F4] shadow-xl p-6 lg:p-8 flex flex-col justify-between shrink-0 mb-6 lg:mb-0">
         <div>
-          <span className="text-[10px] font-mono text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded font-bold uppercase">ADMIN LEVEL CLEARED</span>
-          <h1 className="text-3xl font-bold font-display text-slate-800 mt-2">Central CMS / CRM Control Deck</h1>
-          <p className="text-xs text-slate-400">Configure public service catalogs, client case histories, research journals, and track corporate pipeline inquiries.</p>
+          {/* Identity Header */}
+          <div className="mb-8 text-left">
+            <span className="text-[9px] font-mono text-indigo-600 bg-indigo-100/50 px-2.5 py-1 rounded font-bold uppercase tracking-wider">ADMIN LEVEL CLEARED</span>
+            <h1 className="text-xl font-bold font-display text-slate-800 mt-2.5 flex items-center gap-2">
+              <LucideIcons.ShieldAlert className="w-5 h-5 text-indigo-650" />
+              <span>CMS Control</span>
+            </h1>
+            <p className="text-[11px] text-slate-400 mt-1">Configure active catalogues, journals, inquiries & process pipelines.</p>
+          </div>
+
+          {/* Navigation links formatted as distinct list tabs */}
+          <nav className="space-y-1.5 text-left">
+            {[
+              { id: 'overview', label: 'Overview Metrics', icon: LucideIcons.LayoutDashboard },
+              { id: 'inquiries', label: `Inbound Leads (${inquiries.length})`, icon: LucideIcons.Inbox },
+              { id: 'services', label: 'Services Catalogue', icon: LucideIcons.Cpu },
+              { id: 'projects', label: 'Projects Cases', icon: LucideIcons.Briefcase },
+              { id: 'blogs', label: 'Research Blogs', icon: LucideIcons.BookOpen },
+              { id: 'gallery', label: 'Laboratory Gallery', icon: LucideIcons.Image },
+              { id: 'testimonials', label: 'Testimonials Review', icon: LucideIcons.Star },
+              { id: 'events', label: 'Summits & Panels', icon: LucideIcons.Calendar }
+            ].map(tab => {
+              const TabIcon = tab.icon;
+              const isActive = adminTab === tab.id;
+              return (
+                <button
+                  key={tab.id}
+                  onClick={() => {
+                    setAdminTab(tab.id as any);
+                    clearFormStates();
+                  }}
+                  className={`w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-xs font-bold transition-all ${
+                    isActive
+                      ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-100'
+                      : 'text-slate-650 hover:text-slate-900 hover:bg-slate-100/55'
+                  }`}
+                >
+                  <TabIcon className="w-4 h-4 shrink-0" />
+                  <span className="truncate">{tab.label}</span>
+                </button>
+              );
+            })}
+          </nav>
         </div>
-        <div className="flex items-center space-x-3 shrink-0">
-          <div className="flex items-center space-x-2 bg-slate-50 border p-2 rounded-xl">
-            <div className="w-8 h-8 rounded-lg bg-indigo-600 flex items-center justify-center text-white font-bold font-mono text-sm">
+
+        {/* User profile & dynamic toggle out at bottom of sidebar */}
+        <div className="mt-8 pt-6 border-t border-slate-100/60 flex items-center justify-between">
+          <div className="flex items-center space-x-2">
+            <div className="w-8 h-8 rounded-lg bg-indigo-600 flex items-center justify-center text-white font-bold font-mono text-xs">
               AS
             </div>
-            <div className="text-left leading-none pr-3">
-              <p className="text-xs font-bold text-slate-700">Aria Sterling</p>
+            <div className="text-left leading-none">
+              <p className="text-[11px] font-bold text-slate-800">Aria Sterling</p>
               <span className="text-[9px] font-mono text-slate-400">SUPER_ADMIN</span>
             </div>
           </div>
           <button 
             onClick={() => setIsAuthenticated(false)}
-            className="p-3 bg-rose-50 hover:bg-rose-100 text-rose-600 rounded-xl text-xs font-bold transition-all"
+            className="p-2.5 bg-rose-50 hover:bg-rose-100 text-rose-650 rounded-xl text-xs font-bold transition-all"
             title="Lock Access Control"
           >
-            <LucideIcons.LogOut className="w-4 h-4" />
+            <LucideIcons.LogOut className="w-3.5 h-3.5" />
           </button>
         </div>
-      </div>
+      </aside>
 
-      {crudSuccess && (
-        <div className="p-4 bg-emerald-50 border border-emerald-100 text-emerald-800 rounded-xl text-xs font-semibold flex items-center gap-2 mb-6">
-          <LucideIcons.CheckCircle2 className="w-4 h-4 shrink-0" />
-          <span>{crudSuccess}</span>
-        </div>
-      )}
+      {/* Main Workspace Frame panel holding the dynamically swapped inner screens */}
+      <div className="flex-1 p-6 sm:p-10 lg:p-12 overflow-y-auto max-w-full">
+        {crudSuccess && (
+          <div className="p-4 bg-emerald-50 border border-emerald-100 text-emerald-800 rounded-xl text-xs font-semibold flex items-center gap-2 mb-8 shadow-sm">
+            <LucideIcons.CheckCircle2 className="w-4 h-4 shrink-0" />
+            <span>{crudSuccess}</span>
+          </div>
+        )}
 
-      {/* Admin Navigation Menu tabs */}
-      <div className="flex flex-wrap border-b border-slate-100 mb-8 gap-1">
-        {[
-          { id: 'overview', label: 'Overview Metrics', icon: LucideIcons.LayoutDashboard },
-          { id: 'inquiries', label: `Inbound Inquiries (${inquiries.length})`, icon: LucideIcons.Inbox },
-          { id: 'services', label: 'Services Catalogue', icon: LucideIcons.Cpu },
-          { id: 'projects', label: 'Projects Cases', icon: LucideIcons.Briefcase },
-          { id: 'blogs', label: 'Research Blogs', icon: LucideIcons.BookOpen },
-          { id: 'gallery', label: 'Laboratory Gallery', icon: LucideIcons.Image },
-          { id: 'testimonials', label: 'Testimonials Review', icon: LucideIcons.Star },
-          { id: 'events', label: 'Summits & Panels', icon: LucideIcons.Calendar }
-        ].map(tab => {
-          const TabIcon = tab.icon;
-          return (
-            <button
-              key={tab.id}
-              onClick={() => {
-                setAdminTab(tab.id as any);
-                clearFormStates();
-              }}
-              className={`flex items-center space-x-2 px-4 py-2.5 rounded-t-xl text-xs font-bold transition-all border-b-2 ${
-                adminTab === tab.id
-                  ? 'border-indigo-600 text-indigo-600 bg-indigo-50/40 font-extrabold'
-                  : 'border-transparent text-slate-500 hover:text-slate-800 hover:bg-slate-50'
-              }`}
-            >
-              <TabIcon className="w-4 h-4" />
-              <span>{tab.label}</span>
-            </button>
-          )
-        })}
-      </div>
+        {crudError && (
+          <div className="p-4 bg-rose-50 border border-rose-100 text-rose-800 rounded-xl text-xs font-semibold flex items-center gap-2 mb-8 shadow-sm">
+            <LucideIcons.AlertTriangle className="w-4 h-4 shrink-0" />
+            <span>{crudError}</span>
+          </div>
+        )}
 
       {/* ------------------ TAB 1: OVERVIEW METRICS DETAILED ------------------ */}
       {adminTab === 'overview' && (
@@ -2050,6 +2068,7 @@ export function AdminDashboard({
           )}
         </div>
       )}
+      </div>
     </div>
   );
 }

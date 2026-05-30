@@ -26,6 +26,24 @@ export default function App() {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [loadingError, setLoadingError] = useState<string>('');
 
+  // Routing Helpers (Browser pushState wrappers)
+  const navigateToPage = (pageName: string) => {
+    setCurrentPage(pageName);
+    setIsAdminMode(false);
+    window.history.pushState(null, '', pageName === 'home' ? '/' : `/${pageName}`);
+    window.scrollTo({ top: 0, behavior: 'instant' });
+  };
+
+  const navigateToAdmin = (adminMode: boolean) => {
+    setIsAdminMode(adminMode);
+    if (adminMode) {
+      window.history.pushState(null, '', '/admin');
+    } else {
+      window.history.pushState(null, '', currentPage === 'home' ? '/' : `/${currentPage}`);
+    }
+    window.scrollTo({ top: 0, behavior: 'instant' });
+  };
+
   // Centralized Dynamic Data Fetcher
   const fetchAllData = async () => {
     setIsLoading(true);
@@ -104,22 +122,31 @@ export default function App() {
   useEffect(() => {
     fetchAllData();
 
-    const handleHashChange = () => {
-      if (window.location.hash === '#admin') {
+    const syncRouteFromUrl = () => {
+      const path = window.location.pathname.replace(/^\/|\/$/g, '');
+      const hash = window.location.hash;
+
+      if (path === 'admin' || hash === '#admin') {
         setIsAdminMode(true);
-      } else if (window.location.hash === '' || window.location.hash === '#') {
+      } else {
         setIsAdminMode(false);
+        const validPages = ['about', 'services', 'projects', 'testimonials', 'events', 'blog', 'gallery', 'contact'];
+        if (validPages.includes(path)) {
+          setCurrentPage(path);
+        } else {
+          setCurrentPage('home');
+        }
       }
     };
 
-    // Check initial hash trigger
-    if (window.location.hash === '#admin') {
-      setIsAdminMode(true);
-    }
+    // Run initial sync on mount
+    syncRouteFromUrl();
 
-    window.addEventListener('hashchange', handleHashChange);
+    window.addEventListener('popstate', syncRouteFromUrl);
+    window.addEventListener('hashchange', syncRouteFromUrl);
     return () => {
-      window.removeEventListener('hashchange', handleHashChange);
+      window.removeEventListener('popstate', syncRouteFromUrl);
+      window.removeEventListener('hashchange', syncRouteFromUrl);
     };
   }, []);
 
@@ -129,9 +156,9 @@ export default function App() {
       {/* Dynamic Nav link header */}
       <Navbar 
         currentPage={currentPage}
-        setCurrentPage={setCurrentPage}
+        setCurrentPage={navigateToPage}
         isAdminMode={isAdminMode}
-        setIsAdminMode={setIsAdminMode}
+        setIsAdminMode={navigateToAdmin}
       />
 
       {/* Main Content Area */}
@@ -174,7 +201,7 @@ export default function App() {
             ) : (
               <PublicPages 
                 activeSection={currentPage}
-                setActiveSection={setCurrentPage}
+                setActiveSection={navigateToPage}
                 services={services}
                 projects={projects}
                 blogs={blogs}
@@ -193,8 +220,8 @@ export default function App() {
       {!isAdminMode && (
         <>
           <Footer 
-            setCurrentPage={setCurrentPage}
-            setIsAdminMode={setIsAdminMode}
+            setCurrentPage={navigateToPage}
+            setIsAdminMode={navigateToAdmin}
           />
           <ChatbotWidget />
         </>
