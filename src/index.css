@@ -1,0 +1,97 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Outfit", sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+
+  /* Redefine Indigo to Premium Earthy Sienna, Rich Terracotta & Deep Warm Chocolate Moor */
+  --color-indigo-50: #fdfaf7;
+  --color-indigo-100: #fbf0e8;
+  --color-indigo-200: #f8ded0;
+  --color-indigo-300: #f0ab86;
+  --color-indigo-400: #e5824f;
+  --color-indigo-500: #d65f24;
+  --color-indigo-600: #b84310;
+  --color-indigo-700: #963108;
+  --color-indigo-800: #782405;
+  --color-indigo-900: #491300;
+
+  /* Redefine Cyan to Rich Liquid Amber & Golden Honey */
+  --color-cyan-50: #fffbeb;
+  --color-cyan-100: #fef1c7;
+  --color-cyan-200: #fcd58d;
+  --color-cyan-300: #f7b44d;
+  --color-cyan-400: #f1951e;
+  --color-cyan-500: #d97706;
+  --color-cyan-600: #b45309;
+  --color-cyan-700: #92400e;
+  --color-cyan-800: #78350f;
+  --color-cyan-900: #451a03;
+
+  /* Premium soft warm shadows representing rich physical elevations */
+  --shadow-sm: 0 2px 8px rgba(73, 19, 0, 0.03), 0 1px 3px rgba(0, 0, 0, 0.02);
+  --shadow-md: 0 12px 28px -4px rgba(73, 19, 0, 0.05), 0 4px 10px -2px rgba(0, 0, 0, 0.02);
+  --shadow-lg: 0 22px 48px -6px rgba(73, 19, 0, 0.07), 0 8px 18px -3px rgba(0, 0, 0, 0.02);
+  --shadow-xl: 0 32px 64px -8px rgba(73, 19, 0, 0.09), 0 12px 28px -4px rgba(0, 0, 0, 0.03);
+
+  /* Redefine borders to be transparent so all harsh vertical lines translate to pure shadows */
+  --color-slate-50: transparent;
+  --color-slate-100: transparent;
+  --color-slate-150: transparent;
+  --color-slate-200: transparent;
+
+  /* Soft premium non-sterile light colors */
+  --color-white: #FCF9F4; /* Luxurious Warm Oyster Champagne base */
+}
+
+/* Override default and custom borders globally to satisfy "dont want any border in any places" */
+*, *::before, *::after {
+  border-color: transparent !important;
+}
+
+/* Custom visual layout adjustments */
+body {
+  font-family: var(--font-sans);
+  background-color: #FAF4EB; /* Sophisticated warm oyster champagne bright canvas, not white */
+  color: #38241A; /* Crisp warm espresso text color */
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Custom visual pulse highlights */
+@keyframes cyber-pulse {
+  0%, 100% { opacity: 0.8; }
+  50% { opacity: 0.4; }
+}
+
+.animate-pulse-subtle {
+  animation: cyber-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Masonry support override helper classes */
+.masonry-grid {
+  display: flex;
+  margin-left: -16px;
+  width: auto;
+}
+.masonry-column {
+  padding-left: 16px;
+  background-clip: padding-box;
+}
+
+/* Smooth custom scrollbars for logs and panels */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #CBD5E1;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #94A3B8;
+}
