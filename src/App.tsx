@@ -12,7 +12,15 @@ import Events from './pages/Events';
 import BlogPage from './pages/Blog';
 import GalleryPage from './pages/Gallery';
 import Contact from './pages/Contact';
-import { AdminDashboard } from './pages/AdminDashboard';
+import { AdminLayout } from './pages/admin/AdminLayout';
+import { AdminOverview } from './pages/admin/AdminOverview';
+import { AdminInquiries } from './pages/admin/AdminInquiries';
+import { AdminServices } from './pages/admin/AdminServices';
+import { AdminProjects } from './pages/admin/AdminProjects';
+import { AdminBlogs } from './pages/admin/AdminBlogs';
+import { AdminGallery } from './pages/admin/AdminGallery';
+import { AdminTestimonials } from './pages/admin/AdminTestimonials';
+import { AdminEvents } from './pages/admin/AdminEvents';
 import { Service, Project, Blog, BlogCategory, GalleryItem, Testimonial, EventItem, ContactInquiry } from './types';
 import * as LucideIcons from 'lucide-react';
 import { apiFetch } from './utils/mockFetch';
@@ -51,13 +59,13 @@ function AppContent({
     window.scrollTo(0, 0);
   }, [location.pathname]);
 
-  const isAdminMode = location.pathname === '/admin';
+  const isAdminMode = location.pathname.startsWith('/admin');
 
   return (
     <div className="min-h-screen flex flex-col justify-between bg-transparent text-slate-800 antialiased font-sans">
       
       {/* Dynamic Nav link header */}
-      <Navbar />
+      {!isAdminMode && <Navbar />}
 
       {/* Main Content Area */}
       <main className="flex-1">
@@ -111,22 +119,29 @@ function AppContent({
             />
             <Route path="/gallery" element={<GalleryPage gallery={gallery} />} />
             <Route path="/contact" element={<Contact refreshData={fetchAllData} />} />
-            <Route 
-              path="/admin" 
-              element={
-                <AdminDashboard 
-                  services={services}
-                  projects={projects}
-                  blogs={blogs}
-                  blogCategories={blogCategories}
-                  gallery={gallery}
-                  testimonials={testimonials}
-                  events={events}
-                  inquiries={inquiries}
-                  refreshData={fetchAllData}
-                />
-              } 
-            />
+            <Route path="/admin" element={<AdminLayout inquiriesCount={inquiries.length} />}>
+              <Route 
+                index 
+                element={
+                  <AdminOverview 
+                    services={services}
+                    projects={projects}
+                    blogs={blogs}
+                    gallery={gallery}
+                    testimonials={testimonials}
+                    events={events}
+                    inquiries={inquiries}
+                  />
+                } 
+              />
+              <Route path="inquiries" element={<AdminInquiries inquiries={inquiries} refreshData={fetchAllData} />} />
+              <Route path="services" element={<AdminServices services={services} refreshData={fetchAllData} />} />
+              <Route path="projects" element={<AdminProjects projects={projects} refreshData={fetchAllData} />} />
+              <Route path="blogs" element={<AdminBlogs blogs={blogs} blogCategories={blogCategories} refreshData={fetchAllData} />} />
+              <Route path="gallery" element={<AdminGallery gallery={gallery} refreshData={fetchAllData} />} />
+              <Route path="testimonials" element={<AdminTestimonials testimonials={testimonials} refreshData={fetchAllData} />} />
+              <Route path="events" element={<AdminEvents events={events} refreshData={fetchAllData} />} />
+            </Route>
             {/* Catch-all sends back to Home */}
             <Route 
               path="*" 

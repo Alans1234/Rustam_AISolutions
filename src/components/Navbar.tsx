@@ -51,15 +51,15 @@ export function Navbar() {
           </div>
 
           {/* Desktop Nav */}
-          <nav className="hidden lg:flex space-x-1">
-            {navLinks.map((link) => {
+          <nav className="hidden lg:flex space-x-1 items-center">
+            {navLinks.filter(link => link.id !== 'contact').map((link) => {
               const isActive = !isAdminActive && (location.pathname === link.path);
               return (
                 <button
                   key={link.id}
                   id={`nav-link-${link.id}`}
                   onClick={() => handleNavClick(link.path)}
-                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-200 cursor-pointer ${
+                  className={`px-3 py-2 rounded-lg text-xs font-semibold transition-colors duration-200 cursor-pointer ${
                     isActive 
                       ? 'text-indigo-600 bg-indigo-50/50' 
                       : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
@@ -71,8 +71,19 @@ export function Navbar() {
             })}
           </nav>
 
-          {/* Hidden Admin Access Holder */}
+          {/* Contact Us CTA Button */}
           <div className="hidden lg:flex items-center space-x-3">
+            <button
+              onClick={() => handleNavClick('/contact')}
+              className={`px-5 py-2.5 rounded-xl text-xs font-bold transition-all duration-300 shadow-sm cursor-pointer border border-transparent ${
+                location.pathname === '/contact'
+                  ? 'bg-indigo-700 text-white'
+                  : 'bg-indigo-600 hover:bg-indigo-700 text-white hover:shadow-md hover:scale-[1.02] active:scale-[0.98]'
+              }`}
+              id="nav-contact-cta"
+            >
+              Contact Us
+            </button>
           </div>
 
           {/* Mobile Menu Button */}
