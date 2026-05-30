@@ -99,13 +99,16 @@ app.post('/api/inquiries', (req, res) => {
 // Admin Authentication mockup (simple secure validation matching Aria Sterling & password)
 app.post('/api/admin/login', (req, res) => {
   const { email, password } = req.body;
-  if (email === 'admin@aisolution.com' && password === 'admin123') {
+  const isEmailOk = (email === 'admin@aisolution.com' || email === 'admin');
+  const isPasswordOk = (password === 'admin123' || password === 'admin');
+
+  if (isEmailOk && isPasswordOk) {
     res.json({
       token: 'admin_tok_99182a',
       user: { id: 'u1', email: 'admin@aisolution.com', name: 'Aria Sterling', role: 'admin' }
     });
   } else {
-    res.status(401).json({ error: 'Invalid admin credentials. Use admin@aisolution.com & password admin123' });
+    res.status(401).json({ error: 'Invalid admin credentials. Use admin & password admin' });
   }
 });
 

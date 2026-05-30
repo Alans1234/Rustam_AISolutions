@@ -1,15 +1,12 @@
 import { Cpu, Mail, MapPin, Phone } from 'lucide-react';
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
-interface FooterProps {
-  setCurrentPage: (page: string) => void;
-  setIsAdminMode: (mode: boolean) => void;
-}
+export function Footer() {
+  const navigate = useNavigate();
 
-export function Footer({ setCurrentPage, setIsAdminMode }: FooterProps) {
-  const handleNavClick = (page: string) => {
-    setCurrentPage(page);
-    setIsAdminMode(false);
+  const handleNavClick = (path: string) => {
+    navigate(path);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
@@ -18,8 +15,8 @@ export function Footer({ setCurrentPage, setIsAdminMode }: FooterProps) {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-10">
           {/* Brand block */}
-          <div className="space-y-4">
-            <div className="flex items-center space-x-3 cursor-pointer" onClick={() => handleNavClick('home')}>
+          <div className="space-y-4 text-left">
+            <div className="flex items-center space-x-3 cursor-pointer" onClick={() => handleNavClick('/')}>
               <div className="w-9 h-9 rounded-lg bg-indigo-500 flex items-center justify-center text-white">
                 <Cpu className="w-5 h-5" />
               </div>
@@ -37,31 +34,31 @@ export function Footer({ setCurrentPage, setIsAdminMode }: FooterProps) {
           </div>
 
           {/* Quick Nav links */}
-          <div>
+          <div className="text-left">
             <h3 className="text-white font-semibold text-sm tracking-wider uppercase mb-5 font-display">Sovereign Directory</h3>
             <ul className="space-y-2.5 text-sm">
               <li>
-                <button onClick={() => handleNavClick('home')} className="hover:text-cyan-400 font-medium transition-colors">
+                <button onClick={() => handleNavClick('/')} className="hover:text-cyan-400 font-medium transition-colors cursor-pointer bg-transparent border-none p-0">
                   Product Home
                 </button>
               </li>
               <li>
-                <button onClick={() => handleNavClick('about')} className="hover:text-cyan-400 font-medium transition-colors">
+                <button onClick={() => handleNavClick('/about')} className="hover:text-cyan-400 font-medium transition-colors cursor-pointer bg-transparent border-none p-0">
                   Agency Heritage
                 </button>
               </li>
               <li>
-                <button onClick={() => handleNavClick('services')} className="hover:text-cyan-400 font-medium transition-colors">
+                <button onClick={() => handleNavClick('/services')} className="hover:text-cyan-400 font-medium transition-colors cursor-pointer bg-transparent border-none p-0">
                   Core Competencies
                 </button>
               </li>
               <li>
-                <button onClick={() => handleNavClick('projects')} className="hover:text-cyan-400 font-medium transition-colors">
+                <button onClick={() => handleNavClick('/projects')} className="hover:text-cyan-400 font-medium transition-colors cursor-pointer bg-transparent border-none p-0">
                   Client Deliverables
                 </button>
               </li>
               <li>
-                <button onClick={() => handleNavClick('events')} className="hover:text-cyan-400 font-medium transition-colors">
+                <button onClick={() => handleNavClick('/events')} className="hover:text-cyan-400 font-medium transition-colors cursor-pointer bg-transparent border-none p-0">
                   Summits & Labs
                 </button>
               </li>
@@ -69,26 +66,26 @@ export function Footer({ setCurrentPage, setIsAdminMode }: FooterProps) {
           </div>
 
           {/* Blogs and Gallery */}
-          <div>
+          <div className="text-left">
             <h3 className="text-white font-semibold text-sm tracking-wider uppercase mb-5 font-display">Information Center</h3>
             <ul className="space-y-2.5 text-sm">
               <li>
-                <button onClick={() => handleNavClick('blog')} className="hover:text-cyan-400 font-medium transition-colors">
+                <button onClick={() => handleNavClick('/blog')} className="hover:text-cyan-400 font-medium transition-colors cursor-pointer bg-transparent border-none p-0">
                   Expert Insights Blog
                 </button>
               </li>
               <li>
-                <button onClick={() => handleNavClick('gallery')} className="hover:text-cyan-400 font-medium transition-colors">
+                <button onClick={() => handleNavClick('/gallery')} className="hover:text-cyan-400 font-medium transition-colors cursor-pointer bg-transparent border-none p-0">
                   Laboratory Media
                 </button>
               </li>
               <li>
-                <button onClick={() => handleNavClick('testimonials')} className="hover:text-cyan-400 font-medium transition-colors">
+                <button onClick={() => handleNavClick('/testimonials')} className="hover:text-cyan-400 font-medium transition-colors cursor-pointer bg-transparent border-none p-0">
                   SGI Endorsements
                 </button>
               </li>
               <li>
-                <button onClick={() => handleNavClick('contact')} className="hover:text-cyan-400 font-medium transition-colors">
+                <button onClick={() => handleNavClick('/contact')} className="hover:text-cyan-400 font-medium transition-colors cursor-pointer bg-transparent border-none p-0">
                   Lead Qualification
                 </button>
               </li>
@@ -96,7 +93,7 @@ export function Footer({ setCurrentPage, setIsAdminMode }: FooterProps) {
           </div>
 
           {/* Headquarters contact */}
-          <div className="space-y-4">
+          <div className="space-y-4 text-left">
             <h3 className="text-white font-semibold text-sm tracking-wider uppercase mb-5 font-display">Seattle Headquarters</h3>
             <ul className="space-y-3.5 text-sm text-slate-400">
               <li className="flex items-start space-x-3">
